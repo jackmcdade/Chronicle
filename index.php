@@ -1,13 +1,18 @@
 <?php
 
+if(phpversion() < 5.3) {
+	die('<h3>Chronical requires PHP/5.3 or higher.<br>You are currently running PHP/'.phpversion().'.</h3><p>Time to upgrade.</p>');
+}
+
 require 'app/Slim.php';
 require 'app/parsers/spyc.php';
+require 'app/helpers.php';
 
 $config = Spyc::YAMLLoad('config.yaml');
 
 $app = new Slim(array(
 	'debug' => $config['debug'],
-	'templates.path' => $config['contentDir']
+	'templates.path' => 'content'
 ));
 
 // Sitewide global config
@@ -15,7 +20,6 @@ $app->config = $config;
 
 // This is today
 $app->today = date($app->config['dateFormat']);
-
 
 /**
  * Functions
@@ -31,21 +35,30 @@ function get_meta($date) {
 	$defaults = array(
 		'title' => $app->config['defaultTitle']
 	);
-	$meta = Spyc::YAMLLoad($app->config['contentDir'] .'/'. $date .'/meta.yaml');
+	$meta = Spyc::YAMLLoad('content/'. $date .'/meta.yaml');
 
 	return array_merge($defaults, $meta);
 }
 
 // @todo functions
-function parse_content()
+function get_directories()
 {
-	// probably should be a class
-	$app = Slim::getInstance();
+	$dirs = array_filter(glob('content/*', GLOB_ONLYDIR), 'is_dir');
+
+	// remove the archive dir
+	$archive = array_search('content/archive', $dirs);
+	if ($archive)
+		unset($dirs[$archive]);
+
+	return $dirs;
 }
 
 function find_latest()
-{
-	$app = Slim::getInstance();
+{	
+	$dirs = get_directories();
+	$latest = end($dirs);
+	
+	return get_dir_endpoint($latest);
 }
 
 function find_next()
@@ -56,6 +69,12 @@ function find_next()
 function find_prev()
 {
 	$app = Slim::getInstance();
+}
+
+function get_dir_endpoint($dir)
+{
+	$dir_array = explode('/', $dir);
+	return end($dir_array);
 }
 //
 
@@ -70,7 +89,7 @@ function find_prev()
 $app->get('/', function () use ($app) {
 
 	// @todo make this the "latest", not just today
-	$app->redirect($app->today);
+	$app->redirect(find_latest());
 
 });
 

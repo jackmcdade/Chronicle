@@ -3,6 +3,5 @@ siteName: Chronical Default Title
 defaultTitle: Untitled
 
 dateFormat: Ymd
-contentDir: './content'
 
 debug: true
