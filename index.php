@@ -46,8 +46,12 @@ function get_directories()
 {
 	$dirs = array_filter(glob('content/*', GLOB_ONLYDIR), 'is_dir');
 
+	array_walk($dirs, function(&$item, $key) {
+		$item = get_endpoint($item);
+	});
+
 	// remove the archive dir
-	$archive = array_search('content/archive', $dirs);
+	$archive = array_search('archive', $dirs);
 	if ($archive)
 		unset($dirs[$archive]);
 
@@ -59,15 +63,15 @@ function find_latest()
 	$dirs = get_directories();
 	$latest = end($dirs);
 
-	return get_dir_endpoint($latest);
+	return get_endpoint($latest);
 }
 
 function find_next($date)
 {
 	$dirs = get_directories();
-	$current = array_search('content/'.$date, $dirs);
+	$current = array_search($date, $dirs);
 
-	if ($current)
+	if ($current !== FALSE)
 	{
 		while (key($dirs) !== $current) next($dirs);
 			return next($dirs);	
@@ -79,8 +83,8 @@ function find_next($date)
 function find_prev($date)
 {
 	$dirs = get_directories();
-	$current = array_search('content/'.$date, $dirs);
-	if ($current)
+	$current = array_search($date, $dirs);
+	if ($current !== FALSE)
 	{
 		while (key($dirs) !== $current) next($dirs);
 			return prev($dirs);	
@@ -89,7 +93,7 @@ function find_prev($date)
 	return FALSE;
 }
 
-function get_dir_endpoint($dir)
+function get_endpoint($dir)
 {
 	$dir_array = explode('/', $dir);
 	return end($dir_array);
@@ -114,8 +118,6 @@ $app->get('/', function () use ($app) {
 $app->get('/:date', function ($date) use ($app) {
 
 	$data = get_meta($date);
-
-	print_r($data);
 
 	$app->render($date.'/index.php', $data);
 
