@@ -1,7 +1,17 @@
 <?php
 
+/**
+ * CHRONICLE
+ * 
+ * Chronicle is a light-weight and flexible, file-based publishing engine.
+ * Kudos to Slim (slimframework.com) for powering the RESTful routing
+ * @package Chronicle <http://github.com/jackmcdade/chronicle>
+ * @author Jack McDade
+ * @copyright 2012 Jack McDade <http://jackmcdade.com>
+ */
+
 if(phpversion() < 5.3) {
-	die('<h3>Chronical requires PHP/5.3 or higher.<br>You are currently running PHP/'.phpversion().'.</h3><p>Time to upgrade.</p>');
+	die('<h3>Chronicle requires PHP/5.3 or higher.<br>You are currently running PHP/'.phpversion().'.</h3><p>Time to upgrade.</p>');
 }
 
 require 'app/Slim.php';
@@ -41,7 +51,6 @@ function get_meta($date) {
 	return array_merge($initialize, $meta);
 }
 
-// @todo functions
 function get_directories()
 {
 	$dirs = array_filter(glob('content/*', GLOB_ONLYDIR), 'is_dir');
@@ -84,8 +93,7 @@ function find_prev($date)
 {
 	$dirs = get_directories();
 	$current = array_search($date, $dirs);
-	if ($current !== FALSE)
-	{
+	if ($current !== FALSE) {
 		while (key($dirs) !== $current) next($dirs);
 			return prev($dirs);	
 	}
@@ -112,6 +120,14 @@ $app->get('/', function () use ($app) {
 
 	// @todo make this the "latest", not just today
 	$app->redirect(find_latest());
+
+});
+
+$app->get('archive', function ($archive) use ($app) {
+
+	$data = get_meta($archive);
+
+	$app->render($archive.'/index.php', $data);
 
 });
 
