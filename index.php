@@ -31,12 +31,14 @@ function get_meta($date) {
 
 	$app = Slim::getInstance();
 	
-	$defaults = array(
-		'title' => $app->config['defaultTitle']
+	$initialize = array(
+		'title' => $app->config['defaultTitle'],
+		'prev' => find_prev($date),
+		'next' => find_next($date),
 	);
 	$meta = Spyc::YAMLLoad('content/'. $date .'/meta.yaml');
 
-	return array_merge($defaults, $meta);
+	return array_merge($initialize, $meta);
 }
 
 // @todo functions
@@ -60,14 +62,31 @@ function find_latest()
 	return get_dir_endpoint($latest);
 }
 
-function find_next()
+function find_next($date)
 {
-	$app = Slim::getInstance();
+	$dirs = get_directories();
+	$current = array_search('content/'.$date, $dirs);
+
+	if ($current)
+	{
+		while (key($dirs) !== $current) next($dirs);
+			return next($dirs);	
+	}
+
+	return FALSE;
 }
 
-function find_prev()
+function find_prev($date)
 {
-	$app = Slim::getInstance();
+	$dirs = get_directories();
+	$current = array_search('content/'.$date, $dirs);
+	if ($current)
+	{
+		while (key($dirs) !== $current) next($dirs);
+			return prev($dirs);	
+	}
+
+	return FALSE;
 }
 
 function get_dir_endpoint($dir)
@@ -95,6 +114,9 @@ $app->get('/', function () use ($app) {
 $app->get('/:date', function ($date) use ($app) {
 
 	$data = get_meta($date);
+
+	print_r($data);
+
 	$app->render($date.'/index.php', $data);
 
 });
