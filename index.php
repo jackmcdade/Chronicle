@@ -16,6 +16,14 @@ $app->config = $config;
 // This is today
 $app->today = date($app->config['dateFormat']);
 
+
+/**
+ * Functions
+ * 
+ * Why not keep it all in one file.
+ * This stuff does the dirty work.
+ */
+
 function get_meta($date) {
 
 	$app = Slim::getInstance();
@@ -28,6 +36,29 @@ function get_meta($date) {
 	return array_merge($defaults, $meta);
 }
 
+// @todo functions
+function parse_content()
+{
+	// probably should be a class
+	$app = Slim::getInstance();
+}
+
+function find_latest()
+{
+	$app = Slim::getInstance();
+}
+
+function find_next()
+{
+	$app = Slim::getInstance();
+}
+
+function find_prev()
+{
+	$app = Slim::getInstance();
+}
+//
+
 /**
  * The Routes: Tread lightly!
  * 
@@ -36,7 +67,6 @@ function get_meta($date) {
  * They make the magic happen.
  */
 
-// There is no homepage. Only the latest.
 $app->get('/', function () use ($app) {
 
 	// @todo make this the "latest", not just today
@@ -46,7 +76,6 @@ $app->get('/', function () use ($app) {
 
 $app->get('/:date', function ($date) use ($app) {
 
-	// $data = Spyc::YAMLLoad($app->config['contentDir'] .'/'. $date .'/meta.yaml');
 	$data = get_meta($date);
 	$app->render($date.'/index.php', $data);
 
