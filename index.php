@@ -43,6 +43,7 @@ function get_meta($date) {
 	
 	$initialize = array(
 		'title' => $app->config['defaultTitle'],
+		'date' => $date,
 		'prev' => find_prev($date),
 		'next' => find_next($date),
 	);
@@ -126,6 +127,12 @@ function get_endpoint($dir)
 {
 	$dir_array = explode('/', $dir);
 	return end($dir_array);
+}
+
+function asset_path($asset) {
+	$app = Slim::getInstance();
+
+	return '/content'.$app->request()->getResourceUri().'/'.$asset;
 }
 //
 
