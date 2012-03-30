@@ -8,6 +8,7 @@ Chronicle is a simple, chronilogically organized, file-based publishing engine. 
 
 * Drop Chronicle on your server (local or otherwise)
 * Customize the main `config.yaml` file to set your global site information
+* rename the `htaccess` file to `.htaccess` (support for no mod_rewrite access is on the roadmap)
 * Start publishing!
 
 ## Diving In
