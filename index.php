@@ -67,6 +67,27 @@ function get_directories()
 	return $dirs;
 }
 
+function build_archive()
+{
+	$app = Slim::getInstance();
+
+	$dirs = get_directories();
+	$archive = array();
+	
+	foreach ($dirs as $key => $dir)
+	{
+		$meta_file = 'content/'.$dir.'/meta.yaml';
+		if (file_exists($meta_file))
+			$archive[$dir] = Spyc::YAMLLoad($meta_file);
+		else
+			$archive[$dir] = $app->config['defaultTitle'];
+		
+		$archive[$dir]['url'] = '/'.$dir;
+	}
+	return $archive;
+}
+
+
 function find_latest()
 {	
 	$dirs = get_directories();
@@ -83,7 +104,7 @@ function find_next($date)
 	if ($current !== FALSE)
 	{
 		while (key($dirs) !== $current) next($dirs);
-			return next($dirs);	
+			return next($dirs);
 	}
 
 	return FALSE;
@@ -118,16 +139,17 @@ function get_endpoint($dir)
 
 $app->get('/', function () use ($app) {
 
-	// @todo make this the "latest", not just today
 	$app->redirect(find_latest());
 
 });
 
-$app->get('archive', function ($archive) use ($app) {
+$app->get('/archive', function (){
 
-	$data = get_meta($archive);
+	$app = Slim::getInstance();
+	$data = Spyc::YAMLLoad('content/archive/meta.yaml');
+	$data['entries'] = build_archive();
 
-	$app->render($archive.'/index.php', $data);
+	$app->render('/archive/index.php', $data);
 
 });
 
