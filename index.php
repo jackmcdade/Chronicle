@@ -6,7 +6,6 @@ if(phpversion() < 5.3) {
 
 require 'app/Slim.php';
 require 'app/parsers/spyc.php';
-require 'app/helpers.php';
 
 $config = Spyc::YAMLLoad('config.yaml');
 
@@ -57,7 +56,7 @@ function find_latest()
 {	
 	$dirs = get_directories();
 	$latest = end($dirs);
-	
+
 	return get_dir_endpoint($latest);
 }
 
