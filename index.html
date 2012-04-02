@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Chronicle : Chronicle is a light-weight and flexible, file-based publishing engine." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Chronicle</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/jackmcdade/Chronicle">Fork Me on GitHub</a>
+
+          <h1 id="project_title">Chronicle</h1>
+          <h2 id="project_tagline">Chronicle is a light-weight and flexible, file-based publishing engine.</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/jackmcdade/Chronicle/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/jackmcdade/Chronicle/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Chronicle</h1>
+
+<p>By Jack McDade</p>
+
+<p>Chronicle is a simple, chronilogically organized, file-based publishing engine. It takes a content directory (which can contain literally anything you want, as long as you have an index.php file), adds a little yaml magic for meta data, and powers all the navigation between entries. Inspired in part by my buddy <a href="http://twitter.com/rockthenroll">Travis Schmeisser</a>.</p>
+
+<h2>Getting Started</h2>
+
+<ul>
+<li>Drop Chronicle on your server (local or otherwise)</li>
+<li>Customize the main <code>config.yaml</code> file to set your global site information</li>
+<li>rename the <code>htaccess</code> file to <code>.htaccess</code> (support for no mod_rewrite access is on the roadmap)</li>
+<li>Start publishing!</li>
+</ul><h2>Diving In</h2>
+
+<ul>
+<li>Chronicle looks for date-based directories inside the <code>/content</code> directory and will automatically redirect the user to the newest "entry" upon visiting the root url ("/").</li>
+<li>Your entries have <code>$prev</code> and <code>$next</code> path variables available to use in your index.php file. For example, add previous and next entry navigation. Look in the <code>/content</code> directory for examples</li>
+<li>If you add a <code>meta.yaml</code> file to any given content subdirectory, any of the <a href="http://en.wikipedia.org/wiki/YAML">YAML</a> key:value pairs will be availble to use in both the index.php view and archive listing page.</li>
+<li>Your archive page will pull all the meta data from all of your content directories to help you build a list. Look at <code>content/archive/index.php</code> for some examples.</li>
+</ul><h2>Helpers</h2>
+
+<ul>
+<li>
+<code>asset_path()</code>: pass in the relative path to any asset (e.g. CSS, JS, image) and it returns the correct full server path. See <code>content/20120330/index.php</code> for an example.</li>
+</ul><h3>More complete documentation coming soon!</h3>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Chronicle maintained by <a href="https://github.com/jackmcdade">jackmcdade</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
